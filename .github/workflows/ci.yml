@@ -26,8 +26,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        BACKEND: [memory, cassandra, scylladb, hbase, rocksdb, mysql, postgresql]
-        JAVA_VERSION: ['8']
+#        BACKEND: [memory, cassandra, scylladb, hbase, rocksdb, mysql, postgresql]
+        BACKEND: [memory, cassandra, scylladb, hbase, rocksdb, postgresql]
+#        JAVA_VERSION: ['8', '11']
+        JAVA_VERSION: ['11']
 
     steps:
       - name: Install JDK ${{ matrix.JAVA_VERSION }}

@@ -940,7 +940,6 @@ public class StandardHugeGraph implements HugeGraph {
     @Override
     public HugeConfig cloneConfig(String newGraph) {
         HugeConfig config = (HugeConfig) this.configuration().clone();
-        config.setDelimiterParsingDisabled(true);
         this.storeProvider.onCloneConfig(config, newGraph);
         return config;
     }

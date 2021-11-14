@@ -36,8 +36,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import javax.security.sasl.AuthenticationException;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
 
 import org.apache.tinkerpop.gremlin.groovy.jsr223.GroovyTranslator;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
@@ -1611,31 +1611,22 @@ public final class HugeGraphAuthProxy implements HugeGraph {
         }
 
         @Override
-        public void applyStrategies(Admin<?, ?> traversal) {
-            String script;
-            if (traversal instanceof HugeScriptTraversal) {
-                script = ((HugeScriptTraversal<?, ?>) traversal).script();
-            } else {
-                GroovyTranslator translator = GroovyTranslator.of("g");
-                script = translator.translate(traversal.getBytecode());
-            }
+        public Iterator<TraversalStrategy<?>> iterator() {
+            if (this.strategies == null) {
+                return new Iterator(){
 
-            /*
-             * Verify gremlin-execute permission for user gremlin(in gremlin-
-             * server-exec worker) and gremlin job(in task worker).
-             * But don't check permission in rest worker, because the following
-             * places need to call traversal():
-             *  1.vertices/edges rest api
-             *  2.oltp rest api (like crosspointpath/neighborrank)
-             *  3.olap rest api (like centrality/lpa/louvain/subgraph)
-             */
-            String caller = Thread.currentThread().getName();
-            if (!caller.contains(REST_WORKER)) {
-                verifyNamePermission(HugePermission.EXECUTE,
-                                     ResourceType.GREMLIN, script);
-            }
+                    @Override
+                    public boolean hasNext() {
+                        return false;
+                    }
 
-            this.strategies.applyStrategies(traversal);
+                    @Override
+                    public Object next() {
+                        throw new IllegalStateException();
+                    }
+                };
+            }
+            return this.strategies.iterator();
         }
 
         @Override
