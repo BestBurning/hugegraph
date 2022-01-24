@@ -126,7 +126,7 @@ public final class ConfigUtil {
             LOG.info("Write HugeConfig to file: '{}'", fileName);
         } catch (ConfigurationException e) {
             throw new HugeException("Failed to write HugeConfig to file '%s'",
-                      e, fileName);
+                                    e, fileName);
         }
     }
 

@@ -87,13 +87,6 @@ if [[ $? -ne 0 || $JAVA_VERSION < $EXPECT_JDK_VERSION ]]; then
     exit 1
 fi
 
-DEFAULT_JAVA_OPTIONS=""
-if [[ $JAVA_VERSION > "1.9" ]]; then
-    DEFAULT_JAVA_OPTIONS="  --add-exports=java.base/jdk.internal.reflect=ALL-UNNAMED \
-                            --add-modules=jdk.unsupported \
-                            --add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
-fi
-
 # Set Java options
 if [ "$JAVA_OPTIONS" = "" ]; then
     XMX=$(calc_xmx $MIN_MEM $MAX_MEM)
@@ -107,6 +100,13 @@ if [ "$JAVA_OPTIONS" = "" ]; then
     # Rolling out detailed GC logs
     #JAVA_OPTIONS="${JAVA_OPTIONS} -XX:+UseGCLogFileRotation -XX:GCLogFileSize=10M -XX:NumberOfGCLogFiles=3 \
     #              -Xloggc:./logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps"
+fi
+
+JAVA_OPTIONS=""
+if [[ $JAVA_VERSION > "1.9" ]]; then
+    JAVA_OPTIONS="${JAVA_OPTIONS} --add-exports=java.base/jdk.internal.reflect=ALL-UNNAMED \
+                                  --add-modules=jdk.unsupported \
+                                  --add-exports=java.base/sun.nio.ch=ALL-UNNAMED "
 fi
 
 # Using G1GC as the default garbage collector (Recommended for large memory machines)
@@ -128,6 +128,6 @@ if [[ ${OPEN_SECURITY_CHECK} == "true" ]]; then
 fi
 
 # Turn on security check
-exec ${JAVA} -Dname="HugeGraphServer" ${DEFAULT_JAVA_OPTIONS} ${JVM_OPTIONS} ${JAVA_OPTIONS} \
+exec ${JAVA} -Dname="HugeGraphServer" ${JVM_OPTIONS} ${JAVA_OPTIONS} \
      -cp ${CLASSPATH}: com.baidu.hugegraph.dist.HugeGraphServer ${GREMLIN_SERVER_CONF} ${REST_SERVER_CONF} \
      >> ${OUTPUT} 2>&1

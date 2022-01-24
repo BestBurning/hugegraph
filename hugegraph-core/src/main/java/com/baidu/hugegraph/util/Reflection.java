@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class Reflection {
 
@@ -90,7 +91,8 @@ public class Reflection {
             reflectionClazz, containingClass, fieldNames);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new HugeException(
-                      "invoke 'registerFieldsToFilter' failed", e);
+                      "Register class '{}' filter fields '{}' is failed",
+                       containingClass, Arrays.toString(fieldNames));
         }
     }
 
@@ -98,7 +100,8 @@ public class Reflection {
                                                String ... methodNames) {
         if (registerMethodsToFilterMethod == null) {
             throw new NotSupportException(
-                      "No support this method 'registerMethodsToFilterMethod'");
+                      "Currently Java version no support " +
+                      "the method 'registerMethodsToFilterMethod'");
         }
 
         try {
@@ -107,7 +110,8 @@ public class Reflection {
             reflectionClazz, containingClass, methodNames);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new HugeException(
-                      "invoke 'registerMethodsToFilter' failed", e);
+                      "Register class '{}' filter method '{}' is failed",
+                       containingClass, Arrays.toString(methodNames));
         }
     }
 }

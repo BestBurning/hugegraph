@@ -54,6 +54,7 @@ public class HugeSecurityManager extends SecurityManager {
     private static final Set<String> ACCEPT_CLASS_LOADERS = ImmutableSet.of(
             "groovy.lang.GroovyClassLoader",
             "sun.reflect.DelegatingClassLoader",
+            "jdk.internal.reflect.DelegatingClassLoader",
             "org.codehaus.groovy.reflection.SunClassLoader",
             "org.codehaus.groovy.runtime.callsite.CallSiteClassLoader",
             "org.apache.hadoop.hbase.util.DynamicClassLoader",
