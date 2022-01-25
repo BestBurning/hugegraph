@@ -22,6 +22,7 @@ package com.baidu.hugegraph.auth;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -1618,25 +1619,13 @@ public final class HugeGraphAuthProxy implements HugeGraph {
         @Override
         public Iterator<TraversalStrategy<?>> iterator() {
             if (this.strategies == null) {
-                return new Iterator(){
+                return Collections.emptyIterator();
 
-                    @Override
-                    public boolean hasNext() {
-                        return false;
-                    }
-
-                    @Override
-                    public Object next() {
-                        throw new IllegalStateException();
-                    }
-                };
             }
-            this.strategies.iterator();
-
             return new MapperIterator<TraversalStrategy<?>,
                                       TraversalStrategy<?>>(
-                       this.strategies.iterator(), (traversalStrategy) -> {
-                           return new TraversalStrategyProxy(traversalStrategy);
+                       this.strategies.iterator(), (strategy) -> {
+                           return new TraversalStrategyProxy(strategy);
                        });
         }
 
@@ -1676,8 +1665,8 @@ public final class HugeGraphAuthProxy implements HugeGraph {
         }
     }
 
-    class TraversalStrategyProxy<T extends TraversalStrategy>
-                                   implements TraversalStrategy<T> {
+    private final class TraversalStrategyProxy<T extends TraversalStrategy>
+                  implements TraversalStrategy<T> {
         final TraversalStrategy<T> origin;
 
         public TraversalStrategyProxy(TraversalStrategy<T> origin) {

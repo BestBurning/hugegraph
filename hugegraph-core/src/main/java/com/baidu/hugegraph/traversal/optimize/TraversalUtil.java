@@ -572,10 +572,12 @@ public final class TraversalUtil {
         List<HasStep> steps =
                       TraversalHelper.getStepsOfAssignableClassRecursively(
                       HasStep.class, traversal);
-        // The graph may be null
-        // For example:
-        // g.V().hasLabel('person').union(__.<Vertex>has("birth", dates[0])),
-        // here "__.has" will create a new traversal, but the graph is null
+        /*
+         * The graph may be null.
+         * For example:
+         *   g.V().hasLabel('person').union(__.<Vertex>has("birth", dates[0]))
+         * Here "__.has" will create a new traversal, but the graph is null
+         */
         if (steps.isEmpty() || !traversal.getGraph().isPresent()) {
             return;
         }
