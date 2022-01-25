@@ -32,8 +32,8 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.ext.WriterInterceptor;
 import jakarta.ws.rs.ext.WriterInterceptorContext;
-
 import jakarta.inject.Singleton;
+
 import org.slf4j.Logger;
 
 import com.baidu.hugegraph.server.RestServer;
