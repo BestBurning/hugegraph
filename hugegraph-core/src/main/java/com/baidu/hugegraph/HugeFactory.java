@@ -65,6 +65,19 @@ public class HugeFactory {
     }
 
     public static synchronized HugeGraph open(HugeConfig config) {
+        SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            // Not allowed to read file via Gremlin when SecurityManager enabled
+            String configFileName;
+            File configFile = config.getFile();
+            if (configFile == null) {
+                configFileName = config.toString();
+            } else {
+                configFileName = configFile.getName();
+            }
+            sm.checkRead(configFileName);
+        }
+
         String name = config.get(CoreOptions.STORE);
         checkGraphName(name, "graph config(like hugegraph.properties)");
         name = name.toLowerCase();

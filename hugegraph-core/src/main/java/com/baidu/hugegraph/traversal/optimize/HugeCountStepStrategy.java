@@ -83,7 +83,9 @@ public final class HugeCountStepStrategy
                   step instanceof CollectingBarrierStep) ||
                  (step instanceof TraversalParent &&
                   TraversalHelper.anyStepRecursively(s -> {
-                      return s instanceof SideEffectStep;
+                      return s instanceof SideEffectStep ||
+                             s instanceof AggregateGlobalStep ||
+                             s instanceof AggregateLocalStep;
                   }, (TraversalParent) step))) {
                 return;
             }
